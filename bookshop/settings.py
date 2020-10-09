@@ -81,7 +81,7 @@ DATABASES = {
         'USER': os.environ.get("USER"),
         'PASSWORD': os.environ.get("PASSWORD"),
         'HOST': os.environ.get("HOST"),
-        'NAME': 5432
+        'PORT': 5432
     }
 }
 
@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'Eurpoe/Minsk'
+TIME_ZONE = 'Europe/Minsk'
 
 USE_I18N = True
 
