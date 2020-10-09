@@ -26,7 +26,7 @@ SECRET_KEY = '944m2z0mtw7uk#q37a!0q@co2c!otlo0k$@)n-s^fbz8om=$+r'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["oleg-vozhdaev.herokuapp.com"]
+ALLOWED_HOSTS = ["oleg-vozhdaev.herokuapp.com", "127.0.0.1"]
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'managebook',
 ]
 
 MIDDLEWARE = [
@@ -88,6 +89,12 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#      'default': {
+#          'ENGINE': 'django.db.backends.sqlite3',
+#          'NAME': os.path.join(BASE_DIR, "db.sqlite3")
+#      }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
