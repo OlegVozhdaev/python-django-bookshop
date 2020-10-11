@@ -5,9 +5,27 @@
     <title>Title</title>
 </head>
 <body>
-    <h1>hello {{ user }} {{ digit }} !</h1>
-        {% for letter in user %}
-            <h3>{{ letter }}</h3>
+    {% for book in content %}
+        <h1>{{ book.title }}</h1>
+        <h5>{{ book.text }}</h5>
+        <h5>rate: {{ book.cached_rate }}</h5>
+        {% for i in '0123456789'|make_list %}
+            <a href="{% url 'add_rate' rate=i book_id=book.id %}"><i>{{ i }}</i></a>
         {% endfor %}
+        <h5>date: {{ book.publish_date }}</h5>
+        <h5>authors: {% for author in book.author.all %}
+            {{ author.username }}
+            {% endfor %}</h5>
+        <h5>genres: {% for genre in book.genre.all %}
+            {{ genre.title }}
+            {% endfor %}</h5>
+        {% for c in book.comment.all %}
+            <h5>{{ c.text }}</h5>
+            <h5>date: {{ c.date }}</h5>
+            <h5>author: {{ c.user }}</h5>
+            <h5>likes: {{ c.cached_like }}</h5>
+        {% endfor %}
+    <hr>
+    {% endfor %}
 </body>
 </html>
