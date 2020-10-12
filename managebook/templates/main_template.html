@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>.checked {color: orange;}
+    </style>
+    <style>.center {text-align: center;}
+    </style>
+</head>
+<body>
+<div class="container p-3 my-3 bg-dark text-white">
+    {% if user.is_authenticated %}
+    <a href="{% url 'logout' %}">logout</a>
+    {% else %}
+    <a href="{% url 'login' %}">login</a>
+    <a href="{% url 'register' %}">register</a>
+    {% endif %}
+    <h1 title="home of da best of da best books" class="center">SUPA BOOKSHOP</h1>
+</div>
+<div class="container">
+
+    {% block index %}
+    {% endblock %}
+
+    {% block login %}
+    {% endblock %}
+
+    {% block register %}
+    {% endblock %}
+
+    {% block add_book %}
+    {% endblock %}
+
+    {% block update_book %}
+    {% endblock %}
+</div>
+</body>
+</html>

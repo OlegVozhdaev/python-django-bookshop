@@ -1,31 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'main_template.html' %}
+
+{% block index %}
+<a href="{% url 'add_book' %}">Add a New Book</a>
     {% for book in content %}
         <h1>{{ book.title }}</h1>
+        <p><a href="{% url 'delete_book' book_id=book.id %}">delete this book</a></p>
+        <p><a href="{% url 'update_book' book_slug=book.slug %}">update this book</a></p>
         <h5>{{ book.text }}</h5>
         <h5>rate: {{ book.cached_rate }}</h5>
         {% for i in '0123456789'|make_list %}
-            <a href="{% url 'add_rate' rate=i book_id=book.id %}"><i>{{ i }}</i></a>
+            <a href="{% url 'add_rate' rate=i book_id=book.id %}">
+                {% if book.user_rate >= i %}
+                    <span class="fa fa-star checked"></span>
+                {% else %}
+                    <span class="fa fa-star"></span>
+                {% endif %}
+            </a>
         {% endfor %}
         <h5>date: {{ book.publish_date }}</h5>
         <h5>authors: {% for author in book.author.all %}
             {{ author.username }}
             {% endfor %}</h5>
         <h5>genres: {% for genre in book.genre.all %}
-            {{ genre.title }}
+            {{ genre.title }},
             {% endfor %}</h5>
-        {% for c in book.comment.all %}
-            <h5>{{ c.text }}</h5>
-            <h5>date: {{ c.date }}</h5>
-            <h5>author: {{ c.user }}</h5>
-            <h5>likes: {{ c.cached_like }}</h5>
-        {% endfor %}
+        <div class="container">
+            {% for c in book.comment.all %}
+                <br>
+                <h5>{{ c.text }}</h5>
+                <h5>date: {{ c.date }}</h5>
+                <h5>author: {{ c.user }}</h5>
+                <a href="{% url 'add_like2comment' comment_id=c.id %}"><h5>likes: {{ c.cached_like }}</h5></a>
+            {% endfor %}
+            <form action="{% url 'add_comment' book_id=book.id %}" method="post">
+                {% csrf_token %}
+                {{ form }}
+            <button type="submit">OK</button>
+            </form>
+        </div>
     <hr>
     {% endfor %}
-</body>
-</html>
+
+{% endblock %}

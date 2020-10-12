@@ -24,9 +24,9 @@ class Book(models.Model):
         verbose_name="название",
         help_text="help text",
         db_index=True,
-        blank=True,
-        null=True,
-        unique=True
+        # blank=True,
+        # null=True,
+        # unique=True
     )
     slug = models.SlugField(unique=True, verbose_name="слаг")
     text = models.TextField(verbose_name="текст")
@@ -56,6 +56,7 @@ class Comment(models.Model):
     like = models.ManyToManyField(User, through="CommentLike", related_name="like", blank=True, null=True)
     cached_like = models.PositiveIntegerField(default=0)
 
+
 class BookLike(models.Model):
     class Meta:
         unique_together = ["user", "book"]
@@ -83,7 +84,12 @@ class CommentLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comment_like")
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        self.comment.cached_like = self.comment.comment_like.count()
+        try:
+            super().save(*args, **kwargs)
+        except IntegrityError:
+            CommentLike.objects.get(comment_id=self.comment.id, user_id=self.user.id).delete()
+            self.comment.cached_like -= 1
+        else:
+            self.comment.cached_like += 1
         self.comment.save()
 
