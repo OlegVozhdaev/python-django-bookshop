@@ -9,11 +9,15 @@
     </style>
     <style>.center {text-align: center;}
     </style>
+    <style>.grad {
+    background-image: linear-gradient(black, rgb(252,220,4), rgb(217,0,0), black, rgb(252,220,4), rgb(217,0,0));}
+    </style>
 </head>
 <body>
-<div class="container p-3 my-3 bg-dark text-white">
+<div class="container p-5 my-3 grad text-success">
     {% if user.is_authenticated %}
     <a href="{% url 'logout' %}">logout</a>
+    from {{ user.username }}
     {% else %}
     <a href="{% url 'login' %}">login</a>
     <a href="{% url 'register' %}">register</a>
@@ -36,6 +40,10 @@
 
     {% block update_book %}
     {% endblock %}
+
+    {% block update_comment %}
+    {% endblock %}
+
 </div>
 </body>
 </html>

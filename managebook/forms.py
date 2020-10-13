@@ -1,5 +1,5 @@
 from django.contrib.auth import password_validation
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UsernameField
 from django.forms import ModelForm, widgets, Textarea, TextInput, SelectMultiple
 from django import forms
 from managebook.models import Book, Comment
@@ -45,4 +45,17 @@ class CustomUserCreateForm(UserCreationForm):
         widget=forms.PasswordInput(attrs={'autocomplete': 'new-password', "class": "form-control"}),
         strip=False,
 
+    )
+
+
+class CustomAuthenticationForm(AuthenticationForm):
+    username = UsernameField(
+        widget=forms.TextInput(attrs={'autofocus': True, "class": "form-control"}),
+        label="Password",
+        strip=False
+    )
+    password = forms.CharField(
+        label="Password",
+        strip=False,
+        widget=forms.PasswordInput(attrs={'autocomplete': 'current-password', "class": "form-control"}),
     )

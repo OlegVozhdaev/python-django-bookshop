@@ -1,11 +1,15 @@
 {% extends 'main_template.html' %}
 
 {% block index %}
+{% if user.is_authenticated %}
 <a href="{% url 'add_book' %}">Add a New Book</a>
+{% endif %}
     {% for book in content %}
         <h1>{{ book.title }}</h1>
+        {% if book.is_owner %}
         <p><a href="{% url 'delete_book' book_id=book.id %}">delete this book</a></p>
         <p><a href="{% url 'update_book' book_slug=book.slug %}">update this book</a></p>
+        {% endif %}
         <h5>{{ book.text }}</h5>
         <h5>rate: {{ book.cached_rate }}</h5>
         {% for i in '0123456789'|make_list %}
@@ -21,22 +25,40 @@
         <h5>authors: {% for author in book.author.all %}
             {{ author.username }}
             {% endfor %}</h5>
-        <h5>genres: {% for genre in book.genre.all %}
-            {{ genre.title }},
-            {% endfor %}</h5>
+            <h5>genres:
+            {% for genre in book.genre.all %}
+            <span class="badge badge-secondary">{{ genre.title }}</span>
+            {% endfor %}
+            </h5>
         <div class="container">
             {% for c in book.comment.all %}
                 <br>
                 <h5>{{ c.text }}</h5>
                 <h5>date: {{ c.date }}</h5>
                 <h5>author: {{ c.user }}</h5>
-                <a href="{% url 'add_like2comment' comment_id=c.id %}"><h5>likes: {{ c.cached_like }}</h5></a>
+                <div>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'add_like2comment' comment_id=c.id %}" class="btn btn-danger">like</a>
+                    {% endif %}
+                    <span>&#10084;{{ c.cached_like }}</span>
+                    <th>
+                        {% for u in c.like.all %}
+                        <span>{{ u }}</span>
+                        {% endfor %}
+                    </th>
+                </div>
+            {% if c.is_owner %}
+            <a href="{% url 'delete_comment' comment_id=c.id %}">delete comment</a>
+            <a href="{% url 'update_comment' comment_id=c.id %}">update comment</a>
+            {% endif %}
             {% endfor %}
+            {% if user.is_authenticated %}
             <form action="{% url 'add_comment' book_id=book.id %}" method="post">
                 {% csrf_token %}
                 {{ form }}
-            <button type="submit">OK</button>
+                <button type="submit" class="btn btn-primary">Comment</button>
             </form>
+            {% endif %}
         </div>
     <hr>
     {% endfor %}
